@@ -1,40 +1,37 @@
 import React, { useState, useReducer } from 'react';
-import { initialState, todoReducer } from '../reducers/reducer';
 
 
-const Form = () => {
-    const [addNewTodo, setAddNewTodo] = useState("");
-    const [state, dispatch] = useReducer(todoReducer, initialState);
-    console.log(state);
-    const handleChanges = event => {
-        setAddNewTodo(event.target.value);
+
+const Form = (props) => {
+    const [addNewTodo, setaddNewTodo] = useState("");
+
+    // console.log(state);
+
+
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        props.addNewTodo(addNewTodo);
+        setaddNewTodo('');
+    };
+
+    const handleClear = (e) => {
+        e.preventDefault();
+        props.clearCompleted();
     };
     return (
         <div>
-            {!state.completed ? (
-                <h1>
-                    {state.item}{""}
-                    <i className="fas fa-plus-square" onClick={() => dispatch({ type: "ADD_TODO" })}
-                    />
-                </h1>
-            ) : (
-                    <div>
-                        <input
-                            className="item-input"
-                            type="text"
-                            name="addNewTodo"
-                            value={addNewTodo}
-                            onChange={handleChanges} />
-                        <button
-                            onClick={() => {
-                                dispatch({ type: "ADD_TODO", payload: addNewTodo });
-                                setAddNewTodo("")
-                            }}>
-                            Add todo
-                         </button>
-                    </div>
-                )}
+            <form onSubmit={handleSubmit}>
+                <input type='text' name='todo' value={addNewTodo} onChange={(e) => setaddNewTodo(e.target.value)} />
+                <button type="submit"><i className="fas fa-plus-square" />Add Todo</button>
+                <button onClick={handleClear}>Clear Completed</button>
+            </form>
         </div>
     );
-};
+}
+
+
+
+
+
 export default Form;
